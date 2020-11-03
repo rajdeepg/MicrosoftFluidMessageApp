@@ -1,0 +1,43 @@
+{
+  "name": "MicrosfotFluidMessageApp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --env.prod --env.clean",
+    "build:dev": "webpack --env.clean",
+    "start": "concurrently \"npm:start:server\" \"npm:start:FRS\"",
+    "start:FRS": "webpack-dev-server --open",
+    "start:server": "tinylicious"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@fluentui/react": "^7.147.1",
+    "@fluidframework/aqueduct": "^0.27.0",
+    "@fluidframework/container-definitions": "^0.27.0",
+    "@fluidframework/core-interfaces": "^0.27.0",
+    "@fluidframework/driver-definitions": "^0.27.0",
+    "@fluidframework/get-tinylicious-container": "^0.27.0",
+    "@fluidframework/merge-tree": "^0.27.0",
+    "@fluidframework/routerlicious-driver": "^0.27.0",
+    "@fluidframework/sequence": "^0.27.0",
+    "@material-ui/core": "^4.11.0",
+    "jest-diff": "^26.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.52",
+    "@types/react-dom": "^16.9.8",
+    "concurrently": "^5.3.0",
+    "dotenv-webpack": "^4.0.0",
+    "html-webpack-plugin": "^4.3.0",
+    "tinylicious": "0.2.3810",
+    "ts-loader": "^6.1.2",
+    "typescript": "^4.0.3",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.8.0"
+  }
+}

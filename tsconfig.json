@@ -1,0 +1,21 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "allowSyntheticDefaultImports": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "target": "es6",
+        "noUnusedLocals": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "outDir": "built",
+        "sourceMap": true,
+        "inlineSources": true,
+        "strict": true,
+        "noImplicitAny": false
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": ["node_modules"]
+}
+
