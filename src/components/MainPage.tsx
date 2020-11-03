@@ -107,9 +107,11 @@ export const MainPage = () => {
   }
 
   function _handleClick(e) {
-    addMessage(messageText);
-    updateMessageText("");
-    e.currentTarget.value = "";
+    if (messageText != "") {
+      addMessage(messageText);
+      updateMessageText("");
+      e.currentTarget.value = "";  
+    }
     e.preventDefault();
   }
 
@@ -129,32 +131,6 @@ export const MainPage = () => {
       </Material.AppBar>
       <main className={classes.layout}>
           <Material.Grid container spacing={1}>
-            <Material.Grid item xs={12}>
-              <br></br>
-              <TextField
-                placeholder="What needs to be done?"
-                componentRef={fieldRef}
-                onChange={(e, text) => {
-                  if (text) {
-                    updateMessageText(text);
-                  }
-                }}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    addMessage(messageText);
-                    updateMessageText("");
-                    e.currentTarget.value = "";
-                    e.preventDefault();
-                  }
-                }}
-                value={messageText}
-              />
-              {messages.length > 0 ? (
-                <List items={messages} onRenderCell={MessageItemComponent} />
-              ) : (
-                <></>
-              )}
-            </Material.Grid>
             <Material.Grid item xs={9}>
               <Material.InputLabel htmlFor="my-input">
                 Comment
@@ -178,10 +154,20 @@ export const MainPage = () => {
           </Material.Grid>
         <Material.Paper className={classes.paper}>
           <Material.Typography component="h1" variant="h4" align="center">
-            Checkout
+            Comments
           </Material.Typography>
           <React.Fragment>
             <React.Fragment>
+
+            {messages.length > 0 ? (
+                <List items={messages} onRenderCell={MessageItemComponent} />
+              ) : (
+                <></>
+              )}
+
+
+
+
               <Material.Typography variant="h5" gutterBottom>
                 Thank you for your order.
               </Material.Typography>
