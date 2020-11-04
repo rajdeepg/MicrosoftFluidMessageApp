@@ -1,10 +1,8 @@
-import { Text, List, Checkbox, FontIcon, ITextField } from "@fluentui/react";
 import * as React from "react";
 import {
   getMessages,
   getMessageSetters,
-  getMessageString,
-  IMessage,
+  getMessageString
 } from "../state/messageListManager";
 import * as Material from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -31,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
     width: "auto",
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
+    marginTop: theme.spacing(4),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
       width: 600,
       marginLeft: "auto",
@@ -58,6 +57,11 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
   },
+  appIcon: {
+    width: "30px",
+    height: "30px",
+    margin: "5px"
+  }
 }));
 
 export const MainPage = () => {
@@ -70,36 +74,6 @@ export const MainPage = () => {
     updateMessageText,
   } = getMessageSetters();
   const classes = useStyles();
-
-  const MessageItemComponent = (message?: IMessage) => {
-    if (!message) {
-      return <></>;
-    }
-    return (
-      <div style={{ display: "flex", borderTop: "1px solid #e6e6e6" }}>
-        <Checkbox
-          checked={message.completed}
-          onChange={() => {
-            updateMessage(message.id, { completed: !message.completed });
-          }}
-        />
-        <Text>{message.title}</Text>
-        <a
-          onClick={() => {
-            deleteMessage(message.id);
-          }}
-        >
-          <FontIcon
-            iconName={"Delete"}
-            style={{
-              margin: "5px",
-            }}
-          />
-        </a>
-      </div>
-    );
-  };
-  const fieldRef = React.createRef<ITextField>();
 
   function _changeMessageEvent(e) {
     updateMessageText(e.target.value);
@@ -127,6 +101,7 @@ export const MainPage = () => {
         className={classes.appBar}
       >
         <Material.Toolbar>
+           <img src="/src/images/autodesk-logo-small.svg" alt="Autodesk" className={classes.appIcon}></img>
           <Material.Typography variant="h6" color="inherit" noWrap>
             Autodesk and Microsoft Hackathon
           </Material.Typography>
@@ -146,7 +121,7 @@ export const MainPage = () => {
               value={messageText}
             />
             <Material.FormHelperText id="my-helper-text">
-              Comment that will viewable by everyone in the fluid session.
+              Comments will be viewable by everyone who is in this fluid session...
             </Material.FormHelperText>
           </Material.Grid>
           <Material.Grid item xs={3}>
@@ -163,13 +138,9 @@ export const MainPage = () => {
           <Material.Typography component="h1" variant="h4" align="center">
             Comments ({messages.length})
           </Material.Typography>
+          <br></br>
           <React.Fragment>
             <React.Fragment>
-              {messages.length > 0 ? (
-                <List items={messages} onRenderCell={MessageItemComponent} />
-              ) : (
-                <></>
-              )}
               {messages.map((message) => (
                 <Material.Grid container spacing={1} alignContent="center">
                   <Material.Grid item xs={1} alignContent="center">

@@ -12,7 +12,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@fluentui/react": "^7.147.1",
     "@fluidframework/aqueduct": "^0.27.0",
     "@fluidframework/container-definitions": "^0.27.0",
     "@fluidframework/core-interfaces": "^0.27.0",
