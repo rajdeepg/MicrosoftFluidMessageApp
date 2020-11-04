@@ -22,6 +22,7 @@
     "@fluidframework/routerlicious-driver": "^0.27.0",
     "@fluidframework/sequence": "^0.27.0",
     "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
     "jest-diff": "^26.6.0",
     "jsonwebtoken": "^8.5.1",
     "react": "^16.13.1",

@@ -1,11 +1,4 @@
-import {
-  Text,
-  TextField,
-  List,
-  Checkbox,
-  FontIcon,
-  ITextField,
-} from "@fluentui/react";
+import { Text, List, Checkbox, FontIcon, ITextField } from "@fluentui/react";
 import * as React from "react";
 import {
   getMessages,
@@ -15,6 +8,7 @@ import {
 } from "../state/messageListManager";
 import * as Material from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import * as Icon from "@material-ui/icons";
 
 function Copyright() {
   return (
@@ -69,7 +63,12 @@ const useStyles = makeStyles((theme) => ({
 export const MainPage = () => {
   const messages = getMessages(); // Get Messages
   const messageText = getMessageString();
-  const { addMessage, updateMessage, deleteMessage, updateMessageText } = getMessageSetters();
+  const {
+    addMessage,
+    updateMessage,
+    deleteMessage,
+    updateMessageText,
+  } = getMessageSetters();
   const classes = useStyles();
 
   const MessageItemComponent = (message?: IMessage) => {
@@ -102,17 +101,21 @@ export const MainPage = () => {
   };
   const fieldRef = React.createRef<ITextField>();
 
-  function _handleTextFieldChange(e) {
+  function _changeMessageEvent(e) {
     updateMessageText(e.target.value);
   }
 
-  function _handleClick(e) {
+  function _addMessageEvent(e) {
     if (messageText != "") {
       addMessage(messageText);
       updateMessageText("");
-      e.currentTarget.value = "";  
+      e.currentTarget.value = "";
     }
     e.preventDefault();
+  }
+
+  function _deleteMessageEvent(messageId) {
+    deleteMessage(messageId);
   }
 
   return (
@@ -130,52 +133,62 @@ export const MainPage = () => {
         </Material.Toolbar>
       </Material.AppBar>
       <main className={classes.layout}>
-          <Material.Grid container spacing={1}>
-            <Material.Grid item xs={9}>
-              <Material.InputLabel htmlFor="my-input">
-                Comment
-              </Material.InputLabel>
-              <Material.Input
-                id="my-input"
-                aria-describedby="my-helper-text"
-                fullWidth={true}
-                onChange={_handleTextFieldChange}
-                value={messageText}
-              />
-              <Material.FormHelperText id="my-helper-text">
-                Comment that will viewable by everyone in the fluid session.
-              </Material.FormHelperText>
-            </Material.Grid>
-            <Material.Grid item xs={3}>
-              <Material.Button variant="contained" color="primary" onClick={_handleClick}>
-                Add Comment
-              </Material.Button>
-            </Material.Grid>
+        <Material.Grid container spacing={1}>
+          <Material.Grid item xs={9}>
+            <Material.InputLabel htmlFor="my-input">
+              Comment
+            </Material.InputLabel>
+            <Material.Input
+              id="my-input"
+              aria-describedby="my-helper-text"
+              fullWidth={true}
+              onChange={_changeMessageEvent}
+              value={messageText}
+            />
+            <Material.FormHelperText id="my-helper-text">
+              Comment that will viewable by everyone in the fluid session.
+            </Material.FormHelperText>
           </Material.Grid>
+          <Material.Grid item xs={3}>
+            <Material.Button
+              variant="contained"
+              color="primary"
+              onClick={_addMessageEvent}
+            >
+              Add Comment
+            </Material.Button>
+          </Material.Grid>
+        </Material.Grid>
         <Material.Paper className={classes.paper}>
           <Material.Typography component="h1" variant="h4" align="center">
-            Comments
+            Comments ({messages.length})
           </Material.Typography>
           <React.Fragment>
             <React.Fragment>
-
-            {messages.length > 0 ? (
+              {messages.length > 0 ? (
                 <List items={messages} onRenderCell={MessageItemComponent} />
               ) : (
                 <></>
               )}
-
-
-
-
-              <Material.Typography variant="h5" gutterBottom>
-                Thank you for your order.
-              </Material.Typography>
-              <Material.Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
-                confirmation, and will send you an update when your order has
-                shipped.
-              </Material.Typography>
+              {messages.map((message) => (
+                <Material.Grid container spacing={1} alignContent="center">
+                  <Material.Grid item xs={1} alignContent="center">
+                    <Icon.CommentTwoTone />
+                  </Material.Grid>
+                  <Material.Grid item xs={10} alignContent="center">
+                    <Material.Typography>{message.title}</Material.Typography>
+                  </Material.Grid>
+                  <Material.Grid item xs={1} alignContent="center">
+                    <Material.IconButton
+                      onClick={() => {
+                        _deleteMessageEvent(message.id);
+                      }}
+                    >
+                      <Icon.DeleteForever />
+                    </Material.IconButton>
+                  </Material.Grid>
+                </Material.Grid>
+              ))}
             </React.Fragment>
           </React.Fragment>
         </Material.Paper>
