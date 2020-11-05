@@ -2,7 +2,7 @@ import * as React from "react";
 import {
   getMessages,
   getMessageSetters,
-  getMessageString
+  getMessageString,
 } from "../state/messageListManager";
 import * as Material from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -19,6 +19,13 @@ function Copyright() {
       {"."}
     </Material.Typography>
   );
+}
+
+
+let editMessage = {
+  id: "",
+  title: "",
+  completed: false,
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -60,8 +67,8 @@ const useStyles = makeStyles((theme) => ({
   appIcon: {
     width: "30px",
     height: "30px",
-    margin: "5px"
-  }
+    margin: "5px",
+  },
 }));
 
 export const MainPage = () => {
@@ -79,6 +86,11 @@ export const MainPage = () => {
     updateMessageText(e.target.value);
   }
 
+  function _changeEditCommentEvent(e) {
+    editMessage.title = e.target.value;
+    e.preventDefault();
+  }
+
   function _addMessageEvent(e) {
     if (messageText != "") {
       addMessage(messageText);
@@ -92,8 +104,52 @@ export const MainPage = () => {
     deleteMessage(messageId);
   }
 
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = (messageId,  message) => {
+    editMessage.id = messageId;
+    editMessage.title = message;
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOk = () => {
+    updateMessage(editMessage.id, editMessage);
+    setOpen(false);
+  };
+
   return (
     <React.Fragment>
+      <Material.Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <Material.DialogTitle id="alert-dialog-title">{"Comment Editing"}</Material.DialogTitle>
+        <Material.DialogContent>
+          <Material.DialogContentText id="alert-dialog-description">
+            Editing a comment is permanent and cannot be undone.
+          </Material.DialogContentText>
+          <Material.Input
+              id="editMessageInput"
+              aria-describedby="my-helper-text"
+              fullWidth={true}
+              onChange={_changeEditCommentEvent}
+            />
+        </Material.DialogContent>
+        <Material.DialogActions>
+        <Material.Button onClick={handleClose} color="primary">
+            Cancel
+          </Material.Button>
+          <Material.Button onClick={handleOk} color="primary" autoFocus>
+            OK
+          </Material.Button>
+        </Material.DialogActions>
+      </Material.Dialog>
+
       <Material.CssBaseline />
       <Material.AppBar
         position="absolute"
@@ -101,7 +157,11 @@ export const MainPage = () => {
         className={classes.appBar}
       >
         <Material.Toolbar>
-           <img src="/src/images/autodesk-logo-small.svg" alt="Autodesk" className={classes.appIcon}></img>
+          <img
+            src="/src/images/autodesk-logo-small.svg"
+            alt="Autodesk"
+            className={classes.appIcon}
+          ></img>
           <Material.Typography variant="h6" color="inherit" noWrap>
             Autodesk and Microsoft Hackathon
           </Material.Typography>
@@ -121,7 +181,8 @@ export const MainPage = () => {
               value={messageText}
             />
             <Material.FormHelperText id="my-helper-text">
-              Comments will be viewable by everyone who is in this fluid session...
+              Comments will be viewable by everyone who is in this fluid
+              session...
             </Material.FormHelperText>
           </Material.Grid>
           <Material.Grid item xs={3}>
@@ -135,8 +196,12 @@ export const MainPage = () => {
           </Material.Grid>
         </Material.Grid>
         <Material.Paper className={classes.paper}>
-          <Material.Typography component="h1" variant="h4" align="center">
-            Comments ({messages.length})
+          <Material.Typography component="h4" variant="h4" align="center">
+            {messages.length == 0 ? (
+              <span>No Comments</span>
+            ) : (
+              <span>Comments ({messages.length})</span>
+            )}
           </Material.Typography>
           <br></br>
           <React.Fragment>
@@ -146,8 +211,17 @@ export const MainPage = () => {
                   <Material.Grid item xs={1} alignContent="center">
                     <Icon.CommentTwoTone />
                   </Material.Grid>
-                  <Material.Grid item xs={10} alignContent="center">
+                  <Material.Grid item xs={9} alignContent="center">
                     <Material.Typography>{message.title}</Material.Typography>
+                  </Material.Grid>
+                  <Material.Grid item xs={1} alignContent="center">
+                    <Material.IconButton
+                      onClick={() => {
+                        handleClickOpen(message.id, message.title);
+                      }}
+                    >
+                      <Icon.Edit />
+                    </Material.IconButton>
                   </Material.Grid>
                   <Material.Grid item xs={1} alignContent="center">
                     <Material.IconButton
@@ -155,7 +229,7 @@ export const MainPage = () => {
                         _deleteMessageEvent(message.id);
                       }}
                     >
-                      <Icon.DeleteForever />
+                      <Icon.Delete />
                     </Material.IconButton>
                   </Material.Grid>
                 </Material.Grid>
