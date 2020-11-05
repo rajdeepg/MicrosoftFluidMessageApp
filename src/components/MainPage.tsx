@@ -163,7 +163,7 @@ export const MainPage = () => {
             className={classes.appIcon}
           ></img>
           <Material.Typography variant="h6" color="inherit" noWrap>
-            Autodesk and Microsoft Hackathon
+            Auto Fluid
           </Material.Typography>
         </Material.Toolbar>
       </Material.AppBar>
